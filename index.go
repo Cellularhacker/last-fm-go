@@ -1,6 +1,5 @@
 package lastFm
 
-func Init() {
-	initPreRequires()
+func init() {
 	initClient()
 }
