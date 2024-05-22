@@ -26,4 +26,4 @@ src/golang.org/
 /assets/
 
 # OS files which automatically always being generated.
-.DS_Store
+.DS_Store∙
