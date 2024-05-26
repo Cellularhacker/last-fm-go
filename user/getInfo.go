@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	ValueMethodUserGetInfo = "user.getinfo"
+	ValueMethodUserGetInfo = "user.getInfo"
 )
 
 type GetInfoRequest struct {
