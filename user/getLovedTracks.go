@@ -2,6 +2,9 @@ package lastFmUser
 
 import (
 	"fmt"
+	lastFm "github.com/Cellularhacker/last-fm-go"
+	"github.com/goccy/go-json"
+	"net/http"
 	"net/url"
 )
 
@@ -84,4 +87,44 @@ func (gltr *GetLovedTracksRequest) ToQuery() url.Values {
 	}
 
 	return p
+}
+
+type GetLovedTracksResponse struct {
+	Lovedtracks LovedTracks `json:"lovedtracks"`
+}
+type LovedTracks struct {
+	Track []Track    `json:"track"`
+	Attr  PagingInfo `json:"@attr"`
+}
+type Track struct {
+	Artist     MetaData `json:"artist"`
+	Date       Date     `json:"date"`
+	Mbid       string   `json:"mbid"`
+	Url        string   `json:"url"`
+	Name       string   `json:"name"`
+	Image      []Image  `json:"image"`
+	Streamable `json:"streamable"`
+}
+type Streamable struct {
+	Fulltrack string `json:"fulltrack"`
+	Text      string `json:"#text"`
+}
+
+func NewGetLovedTracksResponse() *GetLovedTracksResponse {
+	return &GetLovedTracksResponse{}
+}
+
+func GetLovedTracks(request *GetLovedTracksRequest) (*GetLovedTracksResponse, error) {
+	resp, err := lastFm.MakeRequest(http.MethodGet, request.ToQuery(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("lastFm.MakeRequest(http.MethodGet, request.ToQuery(), nil): %w", err)
+	}
+
+	respBody := NewGetLovedTracksResponse()
+	err = json.Unmarshal(resp, respBody)
+	if err != nil {
+		return nil, fmt.Errorf("json.Unmarshal(resp, respBody): %w", err)
+	}
+
+	return respBody, nil
 }
