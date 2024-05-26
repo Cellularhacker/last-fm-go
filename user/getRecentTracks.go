@@ -187,12 +187,30 @@ func (grtr *GetRecentTracksRequest) ToQuery() url.Values {
 type GetRecentTracksResponse struct {
 	Recenttracks RecentTracks `json:"recenttracks"`
 }
-
-func NewGetRecentTracksResponse() *GetRecentTracksResponse {
-	return &GetRecentTracksResponse{}
+type RecentTracks struct {
+	Track []RecentTrack `json:"track"`
+	Attr  PagingInfo    `json:"@attr"`
 }
-
-type MbidText struct {
+type RecentTrack struct {
+	Artist     MetaData        `json:"artist"`
+	Streamable string          `json:"streamable"`
+	Image      []Image         `json:"image"`
+	Mbid       string          `json:"mbid"`
+	Album      MetaData        `json:"album"`
+	Name       string          `json:"name"`
+	Attr       *AttrNowplaying `json:"@attr,omitempty"`
+	Url        string          `json:"url"`
+	Date       Date            `json:"date,omitempty"`
+}
+type PagingInfo struct {
+	User       string `json:"user"`
+	TotalPages string `json:"totalPages"`
+	Page       string `json:"page"`
+	PerPage    string `json:"perPage"`
+	Total      string `json:"total"`
+}
+type MetaData struct {
+	Url  string `json:"url,omitempty"`
 	Mbid string `json:"mbid"`
 	Text string `json:"#text"`
 }
@@ -203,36 +221,17 @@ type Image struct {
 type AttrNowplaying struct {
 	Nowplaying string `json:"nowplaying"`
 }
-
-func (a *AttrNowplaying) IsZero() bool {
-	return a == nil || len(a.Nowplaying) <= 0 || a.Nowplaying != "true"
-}
-
-type PagingInfo struct {
-	User       string `json:"user"`
-	TotalPages string `json:"totalPages"`
-	Page       string `json:"page"`
-	PerPage    string `json:"perPage"`
-	Total      string `json:"total"`
-}
-type RecentTrackDateInfo struct {
+type Date struct {
 	UnixTimestamp string `json:"uts"`
 	Text          string `json:"#text"`
 }
-type RecentTrack struct {
-	Artist     MbidText            `json:"artist"`
-	Streamable string              `json:"streamable"`
-	Image      []Image             `json:"image"`
-	Mbid       string              `json:"mbid"`
-	Album      MbidText            `json:"album"`
-	Name       string              `json:"name"`
-	Attr       *AttrNowplaying     `json:"@attr,omitempty"`
-	Url        string              `json:"url"`
-	Date       RecentTrackDateInfo `json:"date,omitempty"`
+
+func NewGetRecentTracksResponse() *GetRecentTracksResponse {
+	return &GetRecentTracksResponse{}
 }
-type RecentTracks struct {
-	Track []RecentTrack `json:"track"`
-	Attr  PagingInfo    `json:"@attr"`
+
+func (a *AttrNowplaying) IsZero() bool {
+	return a == nil || len(a.Nowplaying) <= 0 || a.Nowplaying != "true"
 }
 
 func GetRecentTracks(request *GetRecentTracksRequest) (*GetRecentTracksResponse, error) {
@@ -244,7 +243,7 @@ func GetRecentTracks(request *GetRecentTracksRequest) (*GetRecentTracksResponse,
 	respBody := NewGetRecentTracksResponse()
 	err = json.Unmarshal(resp, respBody)
 	if err != nil {
-		return nil, fmt.Errorf("json.Unmarshal([]byte(resp), respBody): %w", err)
+		return nil, fmt.Errorf("json.Unmarshal(resp, respBody): %w", err)
 	}
 
 	return respBody, nil

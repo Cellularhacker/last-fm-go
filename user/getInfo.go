@@ -86,7 +86,7 @@ func GetInfo(request *GetInfoRequest) (*GetInfoResponse, error) {
 	respBody := NewGetInfoResponse()
 	err = json.Unmarshal(resp, respBody)
 	if err != nil {
-		return nil, fmt.Errorf("json.Unmarshal([]byte(resp), respBody): %w", err)
+		return nil, fmt.Errorf("json.Unmarshal(resp, respBody): %w", err)
 	}
 
 	return respBody, nil
