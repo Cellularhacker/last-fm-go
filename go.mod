@@ -3,7 +3,7 @@ module github.com/Cellularhacker/last-fm-go
 go 1.25
 
 require (
-	github.com/Cellularhacker/logger-go v1.0.7
+	github.com/Cellularhacker/logger-go v1.0.8
 	github.com/goccy/go-json v0.10.5
 )
 
