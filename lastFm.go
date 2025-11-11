@@ -1,6 +1,6 @@
 package lastFm
 
-import "github.com/Cellularhacker/logger"
+import "github.com/Cellularhacker/logger-go"
 
 const (
 	lastFmDefaultAPIEndpoint = "https://ws.audioscrobbler.com/2.0/"
